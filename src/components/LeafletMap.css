@@ -1,0 +1,43 @@
+.lmap-unit {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: nowrap;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25), 0 0 0 1.5px rgba(255, 255, 255, 0.7);
+  cursor: default;
+  user-select: none;
+  transform: translate(-50%, -50%);
+}
+
+.lmap-event {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.12);
+  border: 2px solid #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  font-weight: 800;
+  font-size: 13px;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+}
+
+@keyframes lmapRing {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%       { transform: scale(1.9); opacity: 0; }
+}
+
+.lmap-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid #dc2626;
+  animation: lmapRing 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
