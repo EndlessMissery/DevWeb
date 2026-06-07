@@ -186,9 +186,9 @@ export const i18n = {
     },
     contact: {
       label: 'Kontakt',
-      heading: 'Pojďme spolupracovat.',
+      heading: 'Spolupráce',
       sub: 'Otevřen novým výzvám v React Native a frontend vývoji.',
-      footerRight: 'Praha, Česká republika',
+      footerRight: 'Olomouc, Česká republika',
     },
   },
 
