@@ -2,7 +2,9 @@ export const i18n = {
   cs: {
     lang: 'cs',
     nav: {
+      home: 'Domů',
       projects: 'Projekty',
+      about: 'O mně',
       skills: 'Dovednosti',
       contact: 'Kontakt',
       toggle: 'EN',
@@ -15,9 +17,16 @@ export const i18n = {
       cta1: 'Moje práce',
       cta2: 'Kontakt',
     },
+    showcase: {
+      sectionLabel: 'Pixacom Technology',
+      sectionTitle: 'Produkty na kterých jsem pracoval',
+      dndHint: 'Přetahuj a měň velikost widgetů',
+      resetLabel: 'Reset',
+    },
     szos: {
-      label: 'Případová studie',
-      subtitle: 'Dispečerský systém v reálném čase pro české záchranářské složky.',
+      label: 'Frontend Lead',
+      tabType: 'iOS · iPad',
+      subtitle: 'Dispečerský systém v reálném čase pro ZZS.',
       caption: 'Dispečerské rozhraní — abstraktní zobrazení. Skutečné UI pod NDA.',
       whatIBuilt: 'Co jsem budoval',
       features: [
@@ -66,13 +75,77 @@ export const i18n = {
       codeTitle: 'Ukázka kódu',
       codeSub: 'Handler P2P synchronizace — když si dva iPady najdou přes Multipeer Connectivity, automaticky si vymění offline fronty událostí. Skutečný produkční kód.',
     },
+    zzs: {
+      label: 'Frontend Developer při optimalizaci spotřeby baterie a přehřívání zařízení',
+      tabType: 'iOS · Android',
+      subtitle: 'Terénní aplikace pro záchranářské posádky. Moje práce: optimalizace spotřeby baterie a správy stavu.',
+      caption: 'Rozhraní aplikace — abstraktní zobrazení. Skutečné UI pod NDA.',
+      whatIContributed: 'Co jsem přispěl',
+      features: [
+        {
+          title: 'Optimalizace baterie',
+          desc: 'Profiloval a opravil nadměrné zpracování na pozadí. Teplota zařízení i spotřeba baterie se snížily měřitelně při typických 12hodinových záchranářských směnách.',
+        },
+        {
+          title: 'Migrace na Zustand',
+          desc: 'Navrhl a prosadil přechod ze tří vnořených React Contextů na Zustand. Výsledkem jsou scoped subscriptions, žádné prop drilling a podstatně jednodušší čtení stavu.',
+        },
+        {
+          title: 'Eliminace re-renderů',
+          desc: 'Auditoval strom komponent pomocí React DevTools Profileru. Odstranil zbytečné re-rendery způsobené chybějícím memo a nestabilními referencemi objektů a funkcí.',
+        },
+        {
+          title: 'Výkonnostní hooks',
+          desc: 'Systematicky zavedl useMemo a useCallback na kritických místech — memoizace selectorů, event handlerů a computed values tam, kde předchozí kód tyto nástroje ignoroval.',
+        },
+      ],
+      metrics: [
+        { value: '–90%', label: 'Méně re-renderů', note: 'po migraci na Zustand + useCallback' },
+        { value: '3→1', label: 'State store', note: 'vnořené Contexty nahrazeny Zustandem' },
+        { value: '–40%', label: 'Spotřeba baterie', note: 'eliminací zbytečného zpracování na pozadí' },
+      ],
+      codeTitle: 'Ukázka kódu',
+      codeSub: 'Zustand store s useCallback selectorem — každá komponenta subscribuje jen na data, která skutečně potřebuje. Tohle je vzor, který jsme zavedli napříč celou aplikací.',
+    },
+    cloud: {
+      label: 'Frontend Developer',
+      tabType: 'Web · ReactJS',
+      subtitle: 'Webová administrativní platforma pro záchranné složky — ZZS, LSPČR, Horská služba. Dashboard, notifikace, kontakty a formuláře.',
+      caption: 'Administrační rozhraní — abstraktní zobrazení. Skutečné UI pod NDA.',
+      whatIBuilt: 'Co jsem budoval',
+      features: [
+        {
+          title: 'Drag & Drop Dashboard',
+          desc: 'Interaktivní widget dashboard pomocí ReactGridLayout — uživatelé mohou libovolně přeuspořádat a změnit velikost widgetů. Rozložení se ukládá per-user.',
+        },
+        {
+          title: 'Notifikační centrum',
+          desc: 'Kompletní notifikační systém: tvorba zpráv s výběrem konkrétních příjemců, složky Doručená/Odeslaná/Přijatá, doručení do zvonečku s počtem nepřečtených.',
+        },
+        {
+          title: 'Emergency kontakty',
+          desc: '700+ kontaktů s rychlým voláním a e-mailem, filtrací dle role a zkratkovými tlačítky pro tísňové linky 155, 150 a 158.',
+        },
+        {
+          title: 'Responzivita pro iPad',
+          desc: 'Celé administrační rozhraní přizpůsobeno pro iPady — responsivní breakpointy a dotykem optimalizovaná navigace pro použití v terénu.',
+        },
+      ],
+      metrics: [
+        { value: '700+', label: 'Kontaktů', note: 'záchranáři, lékaři, řidiči v systému' },
+        { value: '12+', label: 'Modulů', note: 'dashboard, emergency, HEMS, events...' },
+        { value: '4', label: 'Záchranné složky', note: 'ZZS, LSPČR, HZS, Horská služba' },
+      ],
+      codeTitle: 'Ukázka kódu',
+      codeSub: 'Dashboard s ReactGridLayout — každý widget lze přetáhnout a změnit velikost. Rozložení se ukládá per-user přes vlastní hook useUserLayout.',
+    },
     about: {
       label: 'O mně',
-      h1: 'Tvořím software, který funguje,',
-      h2: 'kdy je to nejdůležitější.',
-      p1: 'Jsem React Native & Frontend Engineer, aktuálně pracuji jako Frontend Lead v Pixacom Technology, kde vyvíjím mobilní a webové aplikace pro české záchranářské složky — záchranné zdravotnické služby, leteckou policii a horskou službu.',
-      p2: 'Zaměřuji se na spolehlivost pod tlakem: rozhraní, která fungují offline, bezproblémově synchronizují mezi zařízeními a dobře fungují na iPadech v sanitkách a na dispečinku.',
-      p3: 'Před přechodem do vývoje jsem studoval Mezinárodní vztahy na Univerzitě Palackého v Olomouci — kombinace přístupu zaměřeného na lidi a technické hloubky.',
+      h1: 'Více informací o mých zkušenostech.',
+      //h2: 'kdy je to nejdůležitější.',
+      p1: 'Jsem React Native & ReactJS Frontend Developer. Aktuálně pracuji jako Frontend Lead v Pixacom Technology, kde vyvíjím mobilní a webové aplikace pro Záchranné zdravotnické služby, Leteckou policii a Horskou službu.',
+      p2: 'Zaměřuji se na spolehlivost, optimalizaci a rozhraní, která fungují jak offline, tak i online, bezproblémově synchronizují mezi zařízeními a dobře fungují na iPadech jak v sanitkách, tak i a na dispečinku.',
+      p3: 'Před příchodem do vývoje jsem pracoval šest let jako grafický designer. Vektory, rastry, UI/UX, 3D',
       roleLabel: 'Aktuální role',
       prevRoleLabel: 'Předchozí role',
       eduLabel: 'Vzdělání',
@@ -121,8 +194,16 @@ export const i18n = {
 
   en: {
     lang: 'en',
+    showcase: {
+      sectionLabel: 'Pixacom Technology',
+      sectionTitle: 'Three products for emergency services',
+      dndHint: 'Drag and resize the widgets',
+      resetLabel: 'Reset',
+    },
     nav: {
+      home: 'Home',
       projects: 'Projects',
+      about: 'About',
       skills: 'Skills',
       contact: 'Contact',
       toggle: 'CS',
@@ -137,6 +218,7 @@ export const i18n = {
     },
     szos: {
       label: 'Case Study',
+      tabType: 'iOS · iPad',
       subtitle: 'A real-time dispatch platform serving Czech emergency services.',
       caption: 'Dispatch interface — abstract representation. Actual UI under NDA.',
       whatIBuilt: 'What I built',
@@ -185,6 +267,70 @@ export const i18n = {
       ],
       codeTitle: 'Code spotlight',
       codeSub: 'The P2P sync handler — when two iPads find each other via Multipeer Connectivity, they exchange their offline event queues automatically. Real production code.',
+    },
+    zzs: {
+      label: 'Performance Case Study',
+      tabType: 'iOS · Android',
+      subtitle: 'Field app for paramedic crews. My contributions: battery consumption optimisation and state management overhaul.',
+      caption: 'App interface — abstract representation. Actual UI under NDA.',
+      whatIContributed: 'What I contributed',
+      features: [
+        {
+          title: 'Battery & Thermal',
+          desc: 'Profiled and fixed excessive background processing. Device temperature and battery drain dropped measurably across typical 12-hour paramedic shifts.',
+        },
+        {
+          title: 'Zustand Migration',
+          desc: 'Proposed and led the move from three nested React Contexts to a single Zustand store. Scoped subscriptions, no prop drilling, and far simpler state reads throughout the app.',
+        },
+        {
+          title: 'Re-render Elimination',
+          desc: 'Audited the component tree with React DevTools Profiler. Removed unnecessary re-renders caused by missing memo boundaries and unstable object and function references.',
+        },
+        {
+          title: 'Performance Hooks',
+          desc: 'Systematically introduced useMemo and useCallback across hot paths — memoising selectors, event handlers, and computed values where the previous codebase ignored these tools.',
+        },
+      ],
+      metrics: [
+        { value: '–90%', label: 'Fewer re-renders', note: 'after Zustand migration + useCallback' },
+        { value: '3→1', label: 'State store', note: 'nested Contexts replaced by Zustand' },
+        { value: '–40%', label: 'Battery drain', note: 'by eliminating background over-processing' },
+      ],
+      codeTitle: 'Code spotlight',
+      codeSub: 'Zustand store with a useCallback selector — each component subscribes only to the data it actually needs. This is the pattern we rolled out across the entire app.',
+    },
+    cloud: {
+      label: 'Web Case Study',
+      tabType: 'Web · ReactJS',
+      subtitle: 'Web-based admin platform for Czech emergency services — ZZS, Aviation Police, Mountain Rescue. Dashboard, notifications, contacts, and forms.',
+      caption: 'Admin interface — abstract representation. Actual UI under NDA.',
+      whatIBuilt: 'What I built',
+      features: [
+        {
+          title: 'Drag & Drop Dashboard',
+          desc: 'Interactive widget dashboard using ReactGridLayout — users can freely reorder and resize any widget. Layout persists per user account across sessions.',
+        },
+        {
+          title: 'Notification Centre',
+          desc: 'Full notification system: compose modal with recipient search, Inbox / Sent / Received folders, and bell delivery with an unread count badge.',
+        },
+        {
+          title: 'Emergency Contacts',
+          desc: '700+ contacts with one-click call and email, role-based filtering, and shortcut dials for emergency lines 155, 150 and 158.',
+        },
+        {
+          title: 'iPad Responsive',
+          desc: 'Entire admin interface adapted for iPad use — responsive breakpoints and touch-optimised navigation for field and dispatch use.',
+        },
+      ],
+      metrics: [
+        { value: '700+', label: 'Contacts', note: 'paramedics, doctors, drivers in system' },
+        { value: '12+', label: 'Modules', note: 'dashboard, emergency, HEMS, events...' },
+        { value: '4', label: 'Emergency services', note: 'ZZS, LSPČR, HZS, Mountain Rescue' },
+      ],
+      codeTitle: 'Code spotlight',
+      codeSub: 'Dashboard built on ReactGridLayout — every widget is draggable and resizable. Layout is stored per user via a custom useUserLayout hook.',
     },
     about: {
       label: 'About',

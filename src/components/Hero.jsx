@@ -3,8 +3,8 @@ import { useLang } from '../context/LangContext'
 import './Hero.css'
 
 const TICKER_ITEMS = [
-  'React Native 0.83', 'Firebase', 'Mapbox', 'SQLite', 'Apple MPC',
-  'Offline-first', 'iOS & iPad', 'Frontend Lead', 'ZZS JMK', 'Pixacom Technology',
+  'React Native', 'React.js', 'JavaScript', 'Firebase', 'Mapbox', 'Apple MPC',
+  'iOS & iPad', 'Frontend Developer'
 ]
 
 export default function Hero() {
@@ -12,46 +12,53 @@ export default function Hero() {
   const { t } = useLang()
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 80)
+    const timer = setTimeout(() => setVisible(true), 60)
     return () => clearTimeout(timer)
   }, [])
 
   return (
     <section className="hero">
       <div className="hero__inner">
-        <div className={`hero__content ${visible ? 'hero__content--visible' : ''}`}>
-          <div className="hero__status">
-            <span className="hero__status-dot" aria-hidden="true" />
-            {t.hero.status}
+        <div className={`hero__content ${visible ? 'hero__content--in' : ''}`}>
+
+          {/* Status line */}
+          <div>
+            <div className="hero__status">
+              <span className="hero__dot" aria-hidden="true" />
+              <span>{t.hero.status}</span>
+            </div>
           </div>
-          <p className="hero__eyebrow">{t.hero.eyebrow}</p>
+          
+          {/* The name — full width, editorial */}
           <h1 className="hero__name">
-            Roman<br />Kalita.
+            <span className="hero__name-line">Roman</span>
+            <span className="hero__name-line">Kalita<span className="hero__period">.</span></span>
           </h1>
-          <p className="hero__sub">
-            {t.hero.sub1}<br className="hero__br" />
-            {t.hero.sub2}
-          </p>
+
+          {/* Info row */}
+          <div className="hero__meta">
+            <span className="hero__meta-item">Frontend Developer</span>
+            <span className="hero__meta-div" aria-hidden="true" />
+            <span className="hero__meta-item">ReactJS · Web</span>
+            <span className="hero__meta-div" aria-hidden="true" />
+            <span className="hero__meta-item">React Native · iOS</span>
+          </div>
+
+          <p className="hero__sub">{t.hero.sub1}</p>
+
           <div className="hero__cta">
-            <a href="#smartzos" className="btn btn--filled">{t.hero.cta1}</a>
+            <a href="#work" className="btn btn--filled">{t.hero.cta1}</a>
             <a href="#contact" className="btn btn--ghost">{t.hero.cta2}</a>
           </div>
         </div>
-
-        <div className={`hero__scroll ${visible ? 'hero__scroll--visible' : ''}`}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" strokeWidth="1.5"
-              strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
       </div>
 
+      {/* Ticker */}
       <div className="hero__ticker" aria-hidden="true">
         <div className="hero__ticker-track">
-          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+          {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
             <span key={i} className="hero__ticker-item">
-              {item}
-              <span className="hero__ticker-sep">·</span>
+              {item}<span className="hero__ticker-sep">—</span>
             </span>
           ))}
         </div>

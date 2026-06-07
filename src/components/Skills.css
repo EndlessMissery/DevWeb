@@ -1,6 +1,7 @@
 .skills {
-  background: var(--bg);
-  padding: 120px 40px;
+  background: var(--bg-surface);
+  padding: 130px 48px;
+  border-top: 1px solid var(--border);
 }
 
 .skills__inner {
@@ -9,41 +10,40 @@
 }
 
 .skills__heading {
-  font-size: clamp(32px, 4vw, 52px);
+  font-size: clamp(32px, 4vw, 54px);
   font-weight: 700;
-  letter-spacing: -0.028em;
+  letter-spacing: -0.032em;
   color: var(--text-primary);
   margin-bottom: 56px;
   margin-top: 8px;
 }
 
+/* Table-style layout */
 .skills__groups {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 0;
 }
 
 .skills__group {
   display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 24px;
+  grid-template-columns: 160px 1fr;
+  gap: 0;
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
   align-items: start;
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--border);
 }
 
-.skills__group:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
+.skills__group:last-child { border-bottom: 1px solid var(--border); }
 
 .skills__group-label {
-  font-size: 11px;
+  font-family: var(--mono);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  padding-top: 7px;
+  padding-top: 6px;
 }
 
 .skills__tags {
@@ -55,26 +55,25 @@
 .skill-pill {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-primary);
-  background: var(--bg-warm);
+  color: var(--text-secondary);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 7px 16px;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  transition: all 0.18s ease;
   letter-spacing: -0.01em;
+  cursor: default;
 }
 
 .skill-pill:hover {
-  background: var(--text-primary);
-  color: var(--bg);
-  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-color: var(--border-mid);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 640px) {
-  .skills { padding: 80px 20px; }
-  .skills__group {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+  .skills { padding: 88px 20px; }
+  .skills__group { grid-template-columns: 1fr; gap: 12px; }
 }

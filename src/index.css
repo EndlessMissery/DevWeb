@@ -4,28 +4,29 @@
   padding: 0;
 }
 
-/* ─── Light mode (default) ─── */
+/* ─── Light mode ─── */
 :root {
-  --bg:           #faf9f6;
-  --bg-surface:   #f3f1ec;
+  --bg:           #ffffff;
+  --bg-surface:   #f5f5f7;
   --bg-elevated:  #ffffff;
+  --bg-card:      rgba(255, 255, 255, 0.78);
 
-  --text-primary:   #1a1916;
-  --text-secondary: #6b6560;
-  --text-tertiary:  #9c9690;
+  --text-primary:   #111111;
+  --text-secondary: #555555;
+  --text-tertiary:  #999999;
 
-  --accent:       #2d5a8e;
-  --accent-hover: #24497a;
-  --red:          #c94040;
+  --accent:        #111111;
+  --accent-light:  #f0f0f2;
+  --accent-muted:  #e0e0e3;
 
-  --border:     rgba(26, 25, 22, 0.07);
-  --border-mid: rgba(26, 25, 22, 0.13);
+  --border:     #e8e8ec;
+  --border-mid: #d0d0d5;
+  --border-strong: #b0b0b8;
 
-  --dot-grid: rgba(26, 25, 22, 0.09);
-
-  --shadow-sm: 0 1px 3px rgba(26,25,22,0.04), 0 2px 10px rgba(26,25,22,0.04);
-  --shadow-md: 0 4px 16px rgba(26,25,22,0.07), 0 1px 4px rgba(26,25,22,0.04);
-  --shadow-lg: 0 12px 40px rgba(26,25,22,0.10), 0 4px 14px rgba(26,25,22,0.06);
+  --shadow-sm:   0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg:   0 16px 48px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.9);
 
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
@@ -34,26 +35,27 @@
 
 /* ─── Dark mode ─── */
 [data-theme="dark"] {
-  --bg:           #161512;
-  --bg-surface:   #1e1d1a;
-  --bg-elevated:  #252420;
+  --bg:           #0a0a0a;
+  --bg-surface:   #141414;
+  --bg-elevated:  #1c1c1c;
+  --bg-card:      rgba(28, 28, 28, 0.82);
 
-  --text-primary:   #faf9f6;
-  --text-secondary: rgba(250, 249, 246, 0.58);
-  --text-tertiary:  rgba(250, 249, 246, 0.33);
+  --text-primary:   #f5f5f5;
+  --text-secondary: #888888;
+  --text-tertiary:  #555555;
 
-  --accent:       #6699cc;
-  --accent-hover: #7aaed6;
-  --red:          #e05252;
+  --accent:        #f5f5f5;
+  --accent-light:  rgba(255,255,255,0.06);
+  --accent-muted:  rgba(255,255,255,0.10);
 
-  --border:     rgba(250, 249, 246, 0.07);
-  --border-mid: rgba(250, 249, 246, 0.12);
+  --border:     rgba(255,255,255,0.08);
+  --border-mid: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.20);
 
-  --dot-grid: rgba(250, 249, 246, 0.06);
-
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.15), 0 2px 10px rgba(0,0,0,0.12);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.20), 0 1px 4px rgba(0,0,0,0.12);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.28), 0 4px 14px rgba(0,0,0,0.16);
+  --shadow-sm:   0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+  --shadow-lg:   0 16px 48px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.4), 0 4px 20px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
 html { scroll-behavior: smooth; }
@@ -71,33 +73,37 @@ body {
 
 #root { width: 100%; }
 
-::selection { background: rgba(45, 90, 142, 0.18); }
+::selection { background: rgba(0,0,0,0.10); }
+[data-theme="dark"] ::selection { background: rgba(255,255,255,0.14); }
 
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+/* ─── Fade-up animation ─── */
 .fade-up {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
 
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.d1 { transition-delay: 0.05s; }
-.d2 { transition-delay: 0.12s; }
+.d1 { transition-delay: 0.06s; }
+.d2 { transition-delay: 0.13s; }
 .d3 { transition-delay: 0.20s; }
-.d4 { transition-delay: 0.28s; }
-.d5 { transition-delay: 0.36s; }
-.d6 { transition-delay: 0.44s; }
+.d4 { transition-delay: 0.27s; }
+.d5 { transition-delay: 0.34s; }
+.d6 { transition-delay: 0.41s; }
 
+/* ─── Section label ─── */
 .section-label {
   display: inline-block;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  margin-bottom: 14px;
+  margin-bottom: 20px;
+  font-family: var(--mono);
 }

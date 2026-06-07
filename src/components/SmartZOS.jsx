@@ -281,7 +281,7 @@ const SIDEBAR = [
   { id: 'chat', icon: '✉' },
 ]
 
-function DispatchMockup({ caption }) {
+export function DispatchMockup({ caption }) {
   const [screen, setScreen] = useState('map')
 
   return (
