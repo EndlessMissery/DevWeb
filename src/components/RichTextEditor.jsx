@@ -46,17 +46,18 @@ const RichTextEditor = forwardRef(function RichTextEditor({ placeholder, labels 
 
   const state = useEditorState({
     editor,
-    selector: (ctx) =>
-      ctx.editor
-        ? {
-            bold: ctx.editor.isActive('bold'),
-            italic: ctx.editor.isActive('italic'),
-            bulletList: ctx.editor.isActive('bulletList'),
-            orderedList: ctx.editor.isActive('orderedList'),
-            canUndo: ctx.editor.can().undo(),
-            canRedo: ctx.editor.can().redo(),
-          }
-        : null,
+    selector: (ctx) => {
+      const ed = ctx.editor
+      if (!ed || ed.isDestroyed) return null
+      return {
+        bold: ed.isActive('bold'),
+        italic: ed.isActive('italic'),
+        bulletList: ed.isActive('bulletList'),
+        orderedList: ed.isActive('orderedList'),
+        canUndo: ed.can().undo?.() ?? false,
+        canRedo: ed.can().redo?.() ?? false,
+      }
+    },
   })
 
   useImperativeHandle(

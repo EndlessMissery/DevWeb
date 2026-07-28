@@ -206,7 +206,7 @@ export const i18n = {
       sub: 'Otevřen novým výzvám v React Native a frontend vývoji.',
       footerRight: 'Olomouc, Česká republika',
       form: {
-        heading: 'Napiš mi zprávu',
+        heading: 'Nebo mi rovnou napište',
         category: 'Typ zprávy',
         categories: {
           collaboration: 'Spolupráce',
