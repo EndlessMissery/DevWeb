@@ -16,7 +16,14 @@ function htmlToPlainText(html) {
   return el.textContent.replace(/\n{3,}/g, '\n\n').trim()
 }
 
-export default function ReplyBox({ toEmail, toName, defaultSubject }) {
+function quoteText(text) {
+  return text
+    .split('\n')
+    .map((line) => `> ${line}`)
+    .join('\n')
+}
+
+export default function ReplyBox({ toEmail, toName, defaultSubject, originalContent, originalDate }) {
   const editorRef = useRef(null)
   const [subject, setSubject] = useState(defaultSubject)
 
@@ -27,7 +34,14 @@ export default function ReplyBox({ toEmail, toName, defaultSubject }) {
 
   const openInMail = () => {
     const html = editorRef.current?.innerHTML.trim() || ''
-    const body = htmlToPlainText(html)
+    let body = htmlToPlainText(html)
+
+    if (originalContent) {
+      const quoted = quoteText(htmlToPlainText(originalContent))
+      const when = originalDate ? new Date(originalDate).toLocaleString('cs-CZ') : ''
+      body += `\n\n${toName || toEmail} napsal(a)${when ? ` ${when}` : ''}:\n${quoted}`
+    }
+
     const url = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     window.location.href = url
   }

@@ -178,6 +178,8 @@ function Dashboard() {
                 toEmail={selected.email}
                 toName={selected.name}
                 defaultSubject={`Re: ${selected.subject}`}
+                originalContent={selected.content}
+                originalDate={selected.created_at}
               />
             </>
           )}
