@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { ThemeProvider, useTheme } from '../context/ThemeContext'
-import { supabase } from '../lib/supabase'
+import { supabaseAdmin as supabase } from './supabaseAdmin'
 import ReplyBox from './ReplyBox'
 import './AdminApp.css'
 
