@@ -308,8 +308,7 @@
 }
 
 .showcase__mockup-wrap { width: 100%; max-width: 860px; }
-.showcase__mockup-wrap .szos__mockup-row { align-items: stretch; }
-.showcase__mockup-wrap .szos__mockup-col { width: 100%; max-width: 100%; }
+.showcase__mockup-wrap .szos__mockup-wrap { align-items: stretch; }
 .showcase__mockup-wrap .mockup { max-width: 100%; }
 
 .showcase__phone-stage {
