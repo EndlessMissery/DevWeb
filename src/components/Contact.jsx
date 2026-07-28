@@ -1,5 +1,6 @@
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../context/LangContext'
+import ContactForm from './ContactForm'
 import './Contact.css'
 
 export default function Contact() {
@@ -44,6 +45,8 @@ export default function Contact() {
               +420 773 101 064
             </a>
           </div>
+
+          <ContactForm />
         </div>
 
         <div className="contact__footer">
