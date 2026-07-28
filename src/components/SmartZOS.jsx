@@ -355,46 +355,48 @@ export function DispatchMockup({ caption, codeTitle, codeSub }) {
   const sample = CODE_SAMPLES[screen]
 
   return (
-    <div className="szos__mockup-wrap">
-      <div className="mockup">
-        <div className="mockup__bar">
-          <div className="mockup__dots">
-            <span className="mockup__dot mockup__dot--red" />
-            <span className="mockup__dot mockup__dot--yellow" />
-            <span className="mockup__dot mockup__dot--green" />
+    <div className="szos__mockup-row">
+      <div className="szos__mockup-col">
+        <div className="mockup">
+          <div className="mockup__bar">
+            <div className="mockup__dots">
+              <span className="mockup__dot mockup__dot--red" />
+              <span className="mockup__dot mockup__dot--yellow" />
+              <span className="mockup__dot mockup__dot--green" />
+            </div>
+            <span className="mockup__title">SmartZOS · ZZS JMK</span>
+            <span className="mockup__live">● LIVE</span>
           </div>
-          <span className="mockup__title">SmartZOS · ZZS JMK</span>
-          <span className="mockup__live">● LIVE</span>
+          <div className="mockup__body">
+
+            <div className="mockup__sidebar">
+              {SIDEBAR.map(item => (
+                <button
+                  key={item.id}
+                  className={`mockup__icon ${screen === item.id ? 'mockup__icon--active' : ''} ${item.isNew ? 'mockup__icon--new' : ''}`}
+                  onClick={() => setScreen(item.id)}
+                >
+                  {item.icon}
+                </button>
+              ))}
+              <div className="mockup__sidebar-spacer" />
+              <div className="mockup__icon"><span className="mockup__status-dot" /></div>
+              <div className="mockup__live-pill">LIVE</div>
+              <div className="mockup__icon mockup__icon--sm">⏻</div>
+            </div>
+
+            <div className="mockup__screen">
+              {(screen === 'map' || screen === 'chat') && <><EventsPanel /><MapArea /></>}
+              {screen === 'new-event' && <NewEventScreen />}
+              {screen === 'board' && <BoardScreen />}
+              {screen === 'three-in-one' && <><EventsPanel narrow /><MapArea /></>}
+              {screen === 'events' && <EventsRegionScreen />}
+            </div>
+
+          </div>
         </div>
-        <div className="mockup__body">
-
-          <div className="mockup__sidebar">
-            {SIDEBAR.map(item => (
-              <button
-                key={item.id}
-                className={`mockup__icon ${screen === item.id ? 'mockup__icon--active' : ''} ${item.isNew ? 'mockup__icon--new' : ''}`}
-                onClick={() => setScreen(item.id)}
-              >
-                {item.icon}
-              </button>
-            ))}
-            <div className="mockup__sidebar-spacer" />
-            <div className="mockup__icon"><span className="mockup__status-dot" /></div>
-            <div className="mockup__live-pill">LIVE</div>
-            <div className="mockup__icon mockup__icon--sm">⏻</div>
-          </div>
-
-          <div className="mockup__screen">
-            {(screen === 'map' || screen === 'chat') && <><EventsPanel /><MapArea /></>}
-            {screen === 'new-event' && <NewEventScreen />}
-            {screen === 'board' && <BoardScreen />}
-            {screen === 'three-in-one' && <><EventsPanel narrow /><MapArea /></>}
-            {screen === 'events' && <EventsRegionScreen />}
-          </div>
-
-        </div>
+        <p className="szos__mockup-caption">{caption}</p>
       </div>
-      <p className="szos__mockup-caption">{caption}</p>
 
       {codeTitle && (
         <div className="szos__code">
