@@ -3,6 +3,7 @@ import { LangProvider } from './context/LangContext'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import ProjectShowcase from './components/ProjectShowcase'
+import PersonalProjects from './components/PersonalProjects'
 import About from './components/About'
 import Skills from './components/Skills'
 import Contact from './components/Contact'
@@ -16,6 +17,7 @@ export default function App() {
         <main>
           <Hero />
           <ProjectShowcase />
+          <PersonalProjects />
           <About />
           <Skills />
           <Contact />

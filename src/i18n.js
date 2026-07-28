@@ -177,6 +177,18 @@ export const i18n = {
         },
       ],
     },
+    personalProjects: {
+      label: 'Osobní projekty',
+      heading: 'Vedlejší projekty',
+      sub: 'Mimo Pixacom vyvíjím vlastní nástroje pro vývojáře.',
+      item: {
+        name: 'DevTooler',
+        tagline: 'Sdílené AI standardy kódu pro vývojářské týmy',
+        desc: 'Knihovna sdílených AI promptů pro vývojářské týmy s vestavěným AI chatem (GPT / Claude), který před exportem validuje vygenerovaný kód proti reálným příkladům z projektu. Plánované rozšíření jako přímá integrace do IDE.',
+        stack: ['React', 'AI Chat (GPT / Claude)', 'GitHub API', 'Code Validation'],
+        type: 'Osobní projekt',
+      },
+    },
     skills: {
       label: 'Dovednosti',
       heading: 'S čím pracuji',
@@ -373,6 +385,18 @@ export const i18n = {
           type: 'Web Application',
         },
       ],
+    },
+    personalProjects: {
+      label: 'Personal Projects',
+      heading: 'Side projects',
+      sub: 'Outside of Pixacom, I build my own developer tools.',
+      item: {
+        name: 'DevTooler',
+        tagline: 'Shared AI code standards for dev teams',
+        desc: 'A library of shared AI prompts for developer teams with a built-in AI chat (GPT / Claude) that validates generated code against real examples from the project before export. Planned expansion into a direct IDE integration.',
+        stack: ['React', 'AI Chat (GPT / Claude)', 'GitHub API', 'Code Validation'],
+        type: 'Personal Project',
+      },
     },
     skills: {
       label: 'Capabilities',
