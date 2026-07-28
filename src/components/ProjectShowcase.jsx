@@ -6,6 +6,10 @@ import { useLang } from '../context/LangContext'
 import { useInView } from '../hooks/useInView'
 import { DispatchMockup } from './SmartZOS'
 import { PhoneMockup } from './ZZSMobile'
+import HighlightedCode from './HighlightedCode'
+import AnimatedMetricValue from './AnimatedMetricValue'
+import MetricRing from './MetricRing'
+import { parseMetricChart } from '../utils/animateMetricValue'
 import './ProjectShowcase.css'
 
 // ─── Per-project pills & accents ──────────────────────────────────────
@@ -14,7 +18,7 @@ const PROJECT_IDS = ['smartzos', 'zzsmobile', 'cloud']
 
 const PROJECT_PILLS = {
   smartzos:  ['React Native 0.83', 'Mapbox', 'Firebase', 'SQLite', 'Apple MPC', 'iOS / iPad'],
-  zzsmobile: ['React Native', 'Zustand', 'Firebase', 'REST API', 'iOS / Android'],
+  zzsmobile: ['React Native', 'Zustand', 'Firebase', 'REST API', 'iOS'],
   cloud:     ['ReactJS', 'React Router', 'REST API', 'Vuexy', 'i18n'],
 }
 
@@ -322,15 +326,22 @@ export default function ProjectShowcase() {
                   ))}
                 </div>
               </div>
-              <div className="showcase__metrics">
-                {data.metrics.map(m => (
-                  <div key={m.value} className="showcase__metric">
-                    <div className="showcase__metric-value" style={{ color: accent }}>{m.value}</div>
-                    <div className="showcase__metric-label">{m.label}</div>
-                    <div className="showcase__metric-note">{m.note}</div>
-                  </div>
-                ))}
-              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="showcase__stats">
+              {data.metrics.map(m => (
+                <div key={m.value} className="stat-card">
+                  <MetricRing value={m.value} accent={accent} active={cardInView} />
+                  {!parseMetricChart(m.value) && (
+                    <div className="stat-card__value" style={{ color: accent }}>
+                      <AnimatedMetricValue value={m.value} active={cardInView} />
+                    </div>
+                  )}
+                  <div className="stat-card__label">{m.label}</div>
+                  <div className="stat-card__note">{m.note}</div>
+                </div>
+              ))}
             </div>
 
             {/* Mockup */}
@@ -386,7 +397,7 @@ export default function ProjectShowcase() {
               <span className="showcase__code-dot" />
               <span className="showcase__code-file">{snippet.file}</span>
             </div>
-            <pre className="showcase__pre"><code>{snippet.code}</code></pre>
+            <pre className="showcase__pre"><code><HighlightedCode code={snippet.code} /></code></pre>
           </div>
         </div>
 

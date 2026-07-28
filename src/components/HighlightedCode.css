@@ -1,0 +1,24 @@
+/* ─── IDE-style token colors — scoped to code blocks only ─── */
+:root {
+  --tok-keyword: #cf222e;
+  --tok-string:  #032f62;
+  --tok-number:  #0550ae;
+  --tok-fn:      #8250df;
+  --tok-comment: #6e7781;
+}
+
+[data-theme="dark"] {
+  --tok-keyword: #ff7b72;
+  --tok-string:  #a5d6ff;
+  --tok-number:  #79c0ff;
+  --tok-fn:      #d2a8ff;
+  --tok-comment: #8b949e;
+}
+
+.tok-keyword { color: var(--tok-keyword); }
+.tok-string  { color: var(--tok-string); }
+.tok-number  { color: var(--tok-number); }
+.tok-fn      { color: var(--tok-fn); }
+.tok-comment { color: var(--tok-comment); font-style: italic; }
+.tok-punct   { color: var(--text-tertiary); }
+.tok-op      { color: var(--text-secondary); }

@@ -488,7 +488,10 @@
 .arch-box--primary {
   background: var(--bg-surface);
   border-color: var(--border-mid);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.arch-box--active { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 
 .arch-box__label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
 .arch-box__sub   { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
@@ -497,7 +500,26 @@
 
 .arch-arrow { display: flex; flex-direction: column; align-items: center; }
 .arch-arrow::before,
-.arch-arrow::after { content: ''; width: 1px; height: 28px; background: var(--border-mid); }
+.arch-arrow::after {
+  content: '';
+  width: 1px;
+  height: 28px;
+  background: var(--border-mid);
+  transition: background 0.2s ease;
+}
+
+.arch-arrow--active::before,
+.arch-arrow--active::after {
+  width: 2px;
+  background: repeating-linear-gradient(to bottom, var(--text-primary) 0 4px, transparent 4px 9px);
+  background-size: 100% 18px;
+  animation: archFlow 0.7s linear infinite;
+}
+
+@keyframes archFlow {
+  from { background-position-y: 0; }
+  to   { background-position-y: -18px; }
+}
 
 .arch-node {
   background: var(--bg-elevated);
@@ -506,12 +528,20 @@
   padding: 14px 20px;
   text-align: center;
   min-width: 140px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+.arch-node--active { border-color: var(--border-strong); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+
 .arch-node--peer { border-color: rgba(45,90,142,0.22); background: rgba(45,90,142,0.06); }
+.arch-node--peer.arch-node--active { border-color: rgba(45,90,142,0.45); }
 .arch-node__label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
 .arch-node__sub   { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
 .arch-peer { display: flex; flex-direction: column; align-items: center; margin-top: -2px; }
+.arch-peer__arrow { transition: transform 0.2s ease; }
+.arch-peer--active .arch-peer__arrow { transform: translateY(-3px); }
 
 /* ─── Metrics ─── */
 .szos__metrics {

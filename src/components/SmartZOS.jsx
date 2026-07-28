@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../context/LangContext'
 import LeafletMap from './LeafletMap'
+import HighlightedCode from './HighlightedCode'
+import AnimatedMetricValue from './AnimatedMetricValue'
 import './SmartZOS.css'
 
 const FEAT_ICONS = [
@@ -342,6 +344,15 @@ export default function SmartZOS() {
   const [metricsRef, metricsInView] = useInView()
   const [codeRef, codeInView] = useInView()
 
+  const [activeNode, setActiveNode] = useState(null)
+  const nodeHandlers = (id) => ({
+    onMouseEnter: () => setActiveNode(id),
+    onMouseLeave: () => setActiveNode((prev) => (prev === id ? null : prev)),
+    onFocus: () => setActiveNode(id),
+    onBlur: () => setActiveNode((prev) => (prev === id ? null : prev)),
+    onClick: () => setActiveNode((prev) => (prev === id ? null : id)),
+  })
+
   return (
     <section className="szos" id="smartzos">
       <div className="szos__glow" aria-hidden="true" />
@@ -385,33 +396,33 @@ export default function SmartZOS() {
             <p className="szos__arch-sub">{s.archSub}</p>
           </div>
           <div className={`szos__arch-diagram fade-up d2 ${archInView ? 'visible' : ''}`}>
-            <div className="arch-box arch-box--primary">
+            <div className={`arch-box arch-box--primary ${activeNode ? 'arch-box--active' : ''}`}>
               <div className="arch-box__label">{s.arch.appState}</div>
               <div className="arch-box__sub">{s.arch.appStateSub}</div>
             </div>
             <div className="arch-arrows">
-              <div className="arch-arrow">
-                <div className="arch-node">
+              <div className={`arch-arrow ${activeNode === 'firebase' ? 'arch-arrow--active' : ''}`}>
+                <button type="button" className={`arch-node ${activeNode === 'firebase' ? 'arch-node--active' : ''}`} {...nodeHandlers('firebase')}>
                   <div className="arch-node__label">{s.arch.firebase}</div>
                   <div className="arch-node__sub">{s.arch.firebaseSub}</div>
-                </div>
+                </button>
               </div>
-              <div className="arch-arrow">
-                <div className="arch-node">
+              <div className={`arch-arrow ${activeNode === 'sqlite' ? 'arch-arrow--active' : ''}`}>
+                <button type="button" className={`arch-node ${activeNode === 'sqlite' ? 'arch-node--active' : ''}`} {...nodeHandlers('sqlite')}>
                   <div className="arch-node__label">{s.arch.sqlite}</div>
                   <div className="arch-node__sub">{s.arch.sqliteSub}</div>
-                </div>
+                </button>
               </div>
             </div>
-            <div className="arch-peer">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <div className={`arch-peer ${activeNode === 'mpc' ? 'arch-peer--active' : ''}`}>
+              <svg className="arch-peer__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 5v14M6 11l6-6 6 6" stroke="rgba(0,113,227,0.5)" strokeWidth="1.5"
                   strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <div className="arch-node arch-node--peer">
+              <button type="button" className={`arch-node arch-node--peer ${activeNode === 'mpc' ? 'arch-node--active' : ''}`} {...nodeHandlers('mpc')}>
                 <div className="arch-node__label">{s.arch.mpc}</div>
                 <div className="arch-node__sub">{s.arch.mpcSub}</div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -419,7 +430,7 @@ export default function SmartZOS() {
         <div className="szos__metrics" ref={metricsRef}>
           {s.metrics.map((m, i) => (
             <div key={m.value} className={`szos__metric fade-up ${metricsInView ? 'visible' : ''} d${i + 1}`}>
-              <div className="szos__metric-value">{m.value}</div>
+              <div className="szos__metric-value"><AnimatedMetricValue value={m.value} active={metricsInView} /></div>
               <div className="szos__metric-label">{m.label}</div>
               <div className="szos__metric-note">{m.note}</div>
             </div>
@@ -436,7 +447,7 @@ export default function SmartZOS() {
               <span className="szos__code-dot" /><span className="szos__code-dot" /><span className="szos__code-dot" />
               <span className="szos__code-filename">AppMenu.js · SmartZOS</span>
             </div>
-            <pre className="szos__pre"><code>{CODE_SNIPPET}</code></pre>
+            <pre className="szos__pre"><code><HighlightedCode code={CODE_SNIPPET} /></code></pre>
           </div>
         </div>
 

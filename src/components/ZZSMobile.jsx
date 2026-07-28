@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../context/LangContext'
 import LeafletMap from './LeafletMap'
+import HighlightedCode from './HighlightedCode'
+import AnimatedMetricValue from './AnimatedMetricValue'
 import './ZZSMobile.css'
 
 // ─── Feature card icons ────────────────────────────────────────────────
@@ -271,7 +273,7 @@ export default function ZZSMobile() {
             <p className="zzs__subtitle">{z.subtitle}</p>
           </div>
           <div className={`zzs__pills fade-up d2 ${headerInView ? 'visible' : ''}`}>
-            {['React Native', 'Zustand', 'Firebase', 'REST API', 'iOS / Android'].map(pill => (
+            {['React Native', 'Zustand', 'Firebase', 'REST API', 'iOS'].map(pill => (
               <span key={pill} className="zzs__pill">{pill}</span>
             ))}
           </div>
@@ -299,7 +301,7 @@ export default function ZZSMobile() {
         <div className="zzs__metrics" ref={metricsRef}>
           {z.metrics.map((m, i) => (
             <div key={m.value} className={`zzs__metric fade-up d${i + 1} ${metricsInView ? 'visible' : ''}`}>
-              <div className="zzs__metric-value">{m.value}</div>
+              <div className="zzs__metric-value"><AnimatedMetricValue value={m.value} active={metricsInView} /></div>
               <div className="zzs__metric-label">{m.label}</div>
               <div className="zzs__metric-note">{m.note}</div>
             </div>
@@ -316,7 +318,7 @@ export default function ZZSMobile() {
               <span className="zzs__code-dot" /><span className="zzs__code-dot" /><span className="zzs__code-dot" />
               <span className="zzs__code-filename">unitStore.js · ZZS Mobile</span>
             </div>
-            <pre className="zzs__pre"><code>{CODE_SNIPPET}</code></pre>
+            <pre className="zzs__pre"><code><HighlightedCode code={CODE_SNIPPET} /></code></pre>
           </div>
         </div>
 
