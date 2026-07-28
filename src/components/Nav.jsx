@@ -22,14 +22,30 @@ function MoonIcon() {
   )
 }
 
+const SECTIONS = ['work', 'about', 'skills', 'contact']
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [active, setActive] = useState('')
   const { t, toggle: toggleLang } = useLang()
   const { theme, toggle: toggleTheme } = useTheme()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40)
+
+      const probeY = 90
+      let current = ''
+      for (const id of SECTIONS) {
+        const el = document.getElementById(id)
+        if (el && el.getBoundingClientRect().top <= probeY) {
+          current = id
+        }
+      }
+      setActive(current)
+    }
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -42,11 +58,11 @@ export default function Nav() {
         <a href="#" className="nav__brand">RK</a>
 
         <ul className="nav__links">
-          <li><a href="#" onClick={close}>{t.nav.home}</a></li>
-          <li><a href="#work" onClick={close}>{t.nav.projects}</a></li>
-          <li><a href="#about" onClick={close}>{t.nav.about}</a></li>
-          <li><a href="#skills" onClick={close}>{t.nav.skills}</a></li>
-          <li><a href="#contact" onClick={close}>{t.nav.contact}</a></li>
+          <li><a href="#" className={active === '' ? 'nav__links--active' : ''} onClick={close}>{t.nav.home}</a></li>
+          <li><a href="#work" className={active === 'work' ? 'nav__links--active' : ''} onClick={close}>{t.nav.projects}</a></li>
+          <li><a href="#about" className={active === 'about' ? 'nav__links--active' : ''} onClick={close}>{t.nav.about}</a></li>
+          <li><a href="#skills" className={active === 'skills' ? 'nav__links--active' : ''} onClick={close}>{t.nav.skills}</a></li>
+          <li><a href="#contact" className={active === 'contact' ? 'nav__links--active' : ''} onClick={close}>{t.nav.contact}</a></li>
         </ul>
 
         <div className="nav__right">
