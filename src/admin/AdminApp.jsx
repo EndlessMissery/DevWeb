@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { ThemeProvider, useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabase'
+import ReplyBox from './ReplyBox'
 import './AdminApp.css'
 
 const CATEGORY_LABEL = {
@@ -103,18 +104,27 @@ function Dashboard() {
               <span className="admin-msg__dot" />
               <span className="admin-msg__cat">{CATEGORY_LABEL[msg.category] || msg.category}</span>
               <span className="admin-msg__name">{msg.name}</span>
+              <span className="admin-msg__subject">{msg.subject}</span>
               <span className="admin-msg__email">{msg.email}</span>
               <span className="admin-msg__date">{new Date(msg.created_at).toLocaleString('cs-CZ')}</span>
             </button>
             {openId === msg.id && (
-              <div
-                className="admin-msg__content"
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(msg.content, {
-                    ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'ul', 'ol', 'li', 'br', 'p'],
-                  }),
-                }}
-              />
+              <>
+                <div
+                  className="admin-msg__content"
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(msg.content, {
+                      ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'ul', 'ol', 'li', 'br', 'p'],
+                    }),
+                  }}
+                />
+                <ReplyBox
+                  key={msg.id}
+                  toEmail={msg.email}
+                  toName={msg.name}
+                  defaultSubject={`Re: ${msg.subject}`}
+                />
+              </>
             )}
           </li>
         ))}

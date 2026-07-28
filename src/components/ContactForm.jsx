@@ -19,6 +19,8 @@ export default function ContactForm() {
   const [category, setCategory] = useState('collaboration')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [subject, setSubject] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
   const handleToolbarClick = (e, command) => {
@@ -30,13 +32,24 @@ export default function ContactForm() {
     e.preventDefault()
     const html = editorRef.current?.innerHTML.trim() || ''
     const clean = DOMPurify.sanitize(html, SANITIZE_OPTS)
-    if (!name.trim() || !email.trim() || !clean) return
+    if (!name.trim() || !email.trim() || !subject.trim() || !clean) return
+
+    if (honeypot) {
+      // Bot filled the hidden field — pretend success, send nothing.
+      setStatus('success')
+      setName('')
+      setEmail('')
+      setSubject('')
+      if (editorRef.current) editorRef.current.innerHTML = ''
+      return
+    }
 
     setStatus('sending')
     const { error } = await supabase.from('messages').insert({
       category,
       name: name.trim(),
       email: email.trim(),
+      subject: subject.trim(),
       content: clean,
     })
 
@@ -48,12 +61,24 @@ export default function ContactForm() {
     setStatus('success')
     setName('')
     setEmail('')
+    setSubject('')
     if (editorRef.current) editorRef.current.innerHTML = ''
   }
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <h3 className="contact-form__heading">{f.heading}</h3>
+
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        className="contact-form__honeypot"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
 
       <div className="contact-form__categories">
         {CATEGORIES.map((cat) => (
@@ -77,6 +102,11 @@ export default function ContactForm() {
           <label htmlFor="cf-email">{f.email}</label>
           <input id="cf-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
+      </div>
+
+      <div className="contact-form__field">
+        <label htmlFor="cf-subject">{f.subject}</label>
+        <input id="cf-subject" value={subject} onChange={(e) => setSubject(e.target.value)} required />
       </div>
 
       <div className="contact-form__field">
