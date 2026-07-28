@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { ThemeProvider, useTheme } from '../context/ThemeContext'
 import { supabaseAdmin as supabase } from './supabaseAdmin'
@@ -9,6 +9,26 @@ const CATEGORY_LABEL = {
   collaboration: 'Spolupráce',
   job: 'Nabídka práce',
   other: 'Jiné',
+}
+
+const CONTENT_TAGS = ['b', 'strong', 'i', 'em', 'ul', 'ol', 'li', 'br', 'p']
+
+function htmlToPlainText(html) {
+  const el = document.createElement('div')
+  el.innerHTML = html
+  return el.textContent.replace(/\s+/g, ' ').trim()
+}
+
+function relativeTime(dateString) {
+  const diffMs = Date.now() - new Date(dateString).getTime()
+  const min = Math.round(diffMs / 60000)
+  if (min < 1) return 'právě teď'
+  if (min < 60) return `před ${min} min`
+  const hrs = Math.round(min / 60)
+  if (hrs < 24) return `před ${hrs} h`
+  const days = Math.round(hrs / 24)
+  if (days < 7) return `před ${days} d`
+  return new Date(dateString).toLocaleDateString('cs-CZ')
 }
 
 function LoginScreen() {
@@ -43,7 +63,8 @@ function Dashboard() {
   const { theme, toggle } = useTheme()
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(true)
-  const [openId, setOpenId] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
+  const [justArrivedId, setJustArrivedId] = useState(null)
 
   useEffect(() => {
     let active = true
@@ -63,6 +84,8 @@ function Dashboard() {
       .channel('messages-inbox')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
         setMessages((prev) => [payload.new, ...prev])
+        setJustArrivedId(payload.new.id)
+        setTimeout(() => setJustArrivedId((id) => (id === payload.new.id ? null : id)), 4000)
       })
       .subscribe()
 
@@ -73,9 +96,10 @@ function Dashboard() {
   }, [])
 
   const unreadCount = messages.filter((m) => !m.read).length
+  const selected = useMemo(() => messages.find((m) => m.id === selectedId) || null, [messages, selectedId])
 
-  const openMessage = async (msg) => {
-    setOpenId(openId === msg.id ? null : msg.id)
+  const selectMessage = async (msg) => {
+    setSelectedId(msg.id)
     if (!msg.read) {
       setMessages((prev) => prev.map((m) => (m.id === msg.id ? { ...m, read: true } : m)))
       await supabase.from('messages').update({ read: true }).eq('id', msg.id)
@@ -85,50 +109,80 @@ function Dashboard() {
   return (
     <div className="admin-dashboard">
       <header className="admin-dashboard__header">
-        <div>
-          <h1>Zprávy {unreadCount > 0 && <span className="admin-dashboard__badge">{unreadCount}</span>}</h1>
-        </div>
+        <h1>Zprávy {unreadCount > 0 && <span className="admin-dashboard__badge">{unreadCount}</span>}</h1>
         <div className="admin-dashboard__actions">
           <button onClick={toggle}>{theme === 'light' ? 'Tmavý' : 'Světlý'} režim</button>
           <button onClick={() => supabase.auth.signOut()}>Odhlásit se</button>
         </div>
       </header>
 
-      {loading && <p className="admin-dashboard__empty">Načítám…</p>}
-      {!loading && messages.length === 0 && <p className="admin-dashboard__empty">Zatím žádné zprávy.</p>}
+      <div className="admin-dashboard__body">
+        <div className="admin-list">
+          {loading && <p className="admin-dashboard__empty">Načítám…</p>}
+          {!loading && messages.length === 0 && <p className="admin-dashboard__empty">Zatím žádné zprávy.</p>}
 
-      <ul className="admin-dashboard__list">
-        {messages.map((msg) => (
-          <li key={msg.id} className={`admin-msg ${!msg.read ? 'admin-msg--unread' : ''}`}>
-            <button className="admin-msg__row" onClick={() => openMessage(msg)}>
-              <span className="admin-msg__dot" />
-              <span className="admin-msg__cat">{CATEGORY_LABEL[msg.category] || msg.category}</span>
-              <span className="admin-msg__name">{msg.name}</span>
-              <span className="admin-msg__subject">{msg.subject}</span>
-              <span className="admin-msg__email">{msg.email}</span>
-              <span className="admin-msg__date">{new Date(msg.created_at).toLocaleString('cs-CZ')}</span>
-            </button>
-            {openId === msg.id && (
-              <>
-                <div
-                  className="admin-msg__content"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(msg.content, {
-                      ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'ul', 'ol', 'li', 'br', 'p'],
-                    }),
-                  }}
-                />
-                <ReplyBox
-                  key={msg.id}
-                  toEmail={msg.email}
-                  toName={msg.name}
-                  defaultSubject={`Re: ${msg.subject}`}
-                />
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+          <ul>
+            {messages.map((msg) => (
+              <li key={msg.id}>
+                <button
+                  className={[
+                    'admin-msg',
+                    !msg.read && 'admin-msg--unread',
+                    selectedId === msg.id && 'admin-msg--selected',
+                    justArrivedId === msg.id && 'admin-msg--new',
+                  ].filter(Boolean).join(' ')}
+                  onClick={() => selectMessage(msg)}
+                >
+                  <span className="admin-msg__top">
+                    <span className="admin-msg__name">
+                      <span className="admin-msg__dot" />
+                      {msg.name}
+                    </span>
+                    <span className="admin-msg__date">{relativeTime(msg.created_at)}</span>
+                  </span>
+                  <span className="admin-msg__subject">{msg.subject}</span>
+                  <span className="admin-msg__preview">{htmlToPlainText(msg.content)}</span>
+                  <span className="admin-msg__cat">{CATEGORY_LABEL[msg.category] || msg.category}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="admin-detail">
+          {!selected && <p className="admin-dashboard__empty admin-detail__placeholder">Vyber zprávu vlevo.</p>}
+
+          {selected && (
+            <>
+              <div className="admin-detail__header">
+                <h2>{selected.subject}</h2>
+                <div className="admin-detail__meta">
+                  <span>{selected.name}</span>
+                  <span>·</span>
+                  <a href={`mailto:${selected.email}`}>{selected.email}</a>
+                  <span>·</span>
+                  <span>{new Date(selected.created_at).toLocaleString('cs-CZ')}</span>
+                  <span className="admin-detail__cat">{CATEGORY_LABEL[selected.category] || selected.category}</span>
+                </div>
+              </div>
+
+              <div
+                className="admin-detail__content"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(selected.content, { ALLOWED_TAGS: CONTENT_TAGS }),
+                }}
+              />
+
+              <ReplyBox
+                key={selected.id}
+                toEmail={selected.email}
+                toName={selected.name}
+                defaultSubject={`Re: ${selected.subject}`}
+              />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
