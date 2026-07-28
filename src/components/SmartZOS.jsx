@@ -35,7 +35,24 @@ const FEAT_ICONS = [
   </svg>,
 ]
 
-const CODE_SNIPPET = `// P2P offline event sync via Apple Multipeer Connectivity
+const MAP_SNIPPET = `// Live unit tracking — Firebase pushes status/location, map updates instantly
+useEffect(() => {
+  const unsub = onValue(ref(db, \`regions/\${region}/units\`), (snap) => {
+    const units = snap.val() ?? {}
+    setMarkers(
+      Object.entries(units).map(([id, u]) => ({
+        id,
+        coords: [u.lat, u.lng],
+        status: u.status,
+        heading: u.heading,
+      }))
+    )
+  })
+
+  return () => unsub()
+}, [region])`
+
+const NEW_EVENT_SNIPPET = `// P2P offline event sync via Apple Multipeer Connectivity
 
 onPeerConnected: (peerName) => {
   // Immediately share unit states with the new peer
@@ -65,6 +82,56 @@ const handlePeerEventCreate = async ({ guid, queuePayload, unitIds }) => {
     ...queuePayload.event,
   })
 }`
+
+const BOARD_SNIPPET = `// Flatten the raw unit list into the dispatch board's column/row grid
+function computeBoardGrid(units, stationCodes) {
+  const rows = {}
+
+  for (const unit of units) {
+    const row = rows[unit.type] ?? (rows[unit.type] = {})
+    row[unit.stationCode] = {
+      id: unit.callSign,
+      color: statusColor(unit.status, unit.urgency),
+    }
+  }
+
+  return Object.entries(rows).map(([type, cells]) => ({
+    type,
+    cells: stationCodes.map((code) => cells[code] ?? null),
+  }))
+}`
+
+const THREE_IN_ONE_SNIPPET = `// Multiple screens float side-by-side — layout persists per dispatcher
+function useFloatingPanels(defaultLayout) {
+  const [panels, setPanels] = useState(defaultLayout)
+
+  const openPanel = (id, props) =>
+    setPanels((prev) => [...prev.filter((p) => p.id !== id), { id, props }])
+
+  const closePanel = (id) =>
+    setPanels((prev) => prev.filter((p) => p.id !== id))
+
+  return { panels, openPanel, closePanel }
+}`
+
+const EVENTS_SNIPPET = `// Group active units by region → station for the multi-region view
+function groupByRegion(units) {
+  return units.reduce((acc, unit) => {
+    const region = acc[unit.regionName] ?? (acc[unit.regionName] = {})
+    const station = region[unit.stationName] ?? (region[unit.stationName] = [])
+    station.push(unit)
+    return acc
+  }, {})
+}`
+
+const CODE_SAMPLES = {
+  map: { filename: 'LiveMap.jsx · SmartZOS', code: MAP_SNIPPET },
+  chat: { filename: 'LiveMap.jsx · SmartZOS', code: MAP_SNIPPET },
+  'new-event': { filename: 'useOfflineEventSync.js · SmartZOS', code: NEW_EVENT_SNIPPET },
+  board: { filename: 'useBoardGrid.js · SmartZOS', code: BOARD_SNIPPET },
+  'three-in-one': { filename: 'useFloatingPanels.js · SmartZOS', code: THREE_IN_ONE_SNIPPET },
+  events: { filename: 'useRegionGroups.js · SmartZOS', code: EVENTS_SNIPPET },
+}
 
 const EVENT_CARDS = [
   { urg: 2, time: '21:26', loc: 'Jihomoravský kraj · Máš...', badge: 'III 03 BL', col: 'orange' },
@@ -283,8 +350,9 @@ const SIDEBAR = [
   { id: 'chat', icon: '✉' },
 ]
 
-export function DispatchMockup({ caption }) {
+export function DispatchMockup({ caption, codeTitle, codeSub }) {
   const [screen, setScreen] = useState('map')
+  const sample = CODE_SAMPLES[screen]
 
   return (
     <div className="szos__mockup-wrap">
@@ -327,6 +395,22 @@ export function DispatchMockup({ caption }) {
         </div>
       </div>
       <p className="szos__mockup-caption">{caption}</p>
+
+      {codeTitle && (
+        <div className="szos__code">
+          <div>
+            <h3 className="szos__section-heading">{codeTitle}</h3>
+            <p className="szos__code-sub">{codeSub}</p>
+          </div>
+          <div className="szos__code-block">
+            <div className="szos__code-bar">
+              <span className="szos__code-dot" /><span className="szos__code-dot" /><span className="szos__code-dot" />
+              <span className="szos__code-filename">{sample.filename}</span>
+            </div>
+            <pre className="szos__pre"><code><HighlightedCode code={sample.code} /></code></pre>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -342,7 +426,6 @@ export default function SmartZOS() {
   const [featRef, featInView] = useInView()
   const [archRef, archInView] = useInView()
   const [metricsRef, metricsInView] = useInView()
-  const [codeRef, codeInView] = useInView()
 
   const [activeNode, setActiveNode] = useState(null)
   const nodeHandlers = (id) => ({
@@ -372,7 +455,7 @@ export default function SmartZOS() {
         </div>
 
         <div className={`fade-up d2 ${mockupInView ? 'visible' : ''}`} ref={mockupRef}>
-          <DispatchMockup caption={s.caption} />
+          <DispatchMockup caption={s.caption} codeTitle={s.codeTitle} codeSub={s.codeSub} />
         </div>
 
         <div className="szos__features" ref={featRef}>
@@ -435,20 +518,6 @@ export default function SmartZOS() {
               <div className="szos__metric-note">{m.note}</div>
             </div>
           ))}
-        </div>
-
-        <div className="szos__code" ref={codeRef}>
-          <div className={`fade-up ${codeInView ? 'visible' : ''}`}>
-            <h3 className="szos__section-heading">{s.codeTitle}</h3>
-            <p className="szos__code-sub">{s.codeSub}</p>
-          </div>
-          <div className={`szos__code-block fade-up d2 ${codeInView ? 'visible' : ''}`}>
-            <div className="szos__code-bar">
-              <span className="szos__code-dot" /><span className="szos__code-dot" /><span className="szos__code-dot" />
-              <span className="szos__code-filename">AppMenu.js · SmartZOS</span>
-            </div>
-            <pre className="szos__pre"><code><HighlightedCode code={CODE_SNIPPET} /></code></pre>
-          </div>
         </div>
 
       </div>

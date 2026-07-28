@@ -564,6 +564,12 @@
 .szos__metric-note  { font-size: 12px; color: var(--text-tertiary); }
 
 /* ─── Code ─── */
+.szos__code {
+  width: 100%;
+  max-width: 860px;
+  margin-top: 24px;
+}
+
 .szos__code-sub {
   font-size: 16px;
   color: var(--text-secondary);

@@ -75,7 +75,7 @@ export const i18n = {
         { value: '6', label: 'React Contextů', note: 'pro souběžné datové toky v reálném čase' },
       ],
       codeTitle: 'Ukázka kódu',
-      codeSub: 'Handler P2P synchronizace — když si dva iPady najdou přes Multipeer Connectivity, automaticky si vymění offline fronty událostí. Skutečný produkční kód.',
+      codeSub: 'Kód se mění podle toho, jakou obrazovku si v mockupu nahoře vybereš — odpovídá tomu, co zrovna vidíš.',
     },
     zzs: {
       label: 'Frontend Developer při optimalizaci spotřeby baterie a přehřívání zařízení',
@@ -305,7 +305,7 @@ export const i18n = {
         { value: '6', label: 'React Contexts', note: 'for concurrent real-time data streams' },
       ],
       codeTitle: 'Code spotlight',
-      codeSub: 'The P2P sync handler — when two iPads find each other via Multipeer Connectivity, they exchange their offline event queues automatically. Real production code.',
+      codeSub: "The code changes with whichever screen you pick in the mockup above — it always matches what you're looking at.",
     },
     zzs: {
       label: 'Performance Case Study',
