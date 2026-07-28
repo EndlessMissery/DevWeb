@@ -8,10 +8,14 @@
 }
 
 .contact-form {
-  margin-top: 56px;
-  padding-top: 48px;
-  border-top: 1px solid var(--border);
-  max-width: 560px;
+  flex: 1;
+  min-width: 0;
+  max-width: 480px;
+  padding: 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   gap: 20px;

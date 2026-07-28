@@ -12,7 +12,13 @@
   min-height: 320px;
 }
 
-.contact__content { flex: 1; }
+.contact__columns {
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
+}
+
+.contact__content { flex: 1.1; min-width: 0; }
 
 .contact__heading {
   font-size: clamp(52px, 8.5vw, 120px);
@@ -91,6 +97,10 @@
   margin-top: 80px;
   font-family: var(--mono);
   letter-spacing: 0.03em;
+}
+
+@media (max-width: 900px) {
+  .contact__columns { flex-direction: column; gap: 40px; }
 }
 
 @media (max-width: 640px) {
