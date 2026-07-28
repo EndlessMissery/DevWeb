@@ -2,14 +2,11 @@ import { useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { useLang } from '../context/LangContext'
 import { supabase } from '../lib/supabase'
+import RichTextEditor from './RichTextEditor'
 import './ContactForm.css'
 
 const CATEGORIES = ['collaboration', 'job', 'other']
 const SANITIZE_OPTS = { ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'ul', 'ol', 'li', 'br', 'p'] }
-
-function exec(command) {
-  document.execCommand(command, false, undefined)
-}
 
 export default function ContactForm() {
   const { t } = useLang()
@@ -23,16 +20,11 @@ export default function ContactForm() {
   const [honeypot, setHoneypot] = useState('')
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
-  const handleToolbarClick = (e, command) => {
-    e.preventDefault()
-    exec(command)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const html = editorRef.current?.innerHTML.trim() || ''
+    const html = editorRef.current?.getHTML() || ''
     const clean = DOMPurify.sanitize(html, SANITIZE_OPTS)
-    if (!name.trim() || !email.trim() || !subject.trim() || !clean) return
+    if (!name.trim() || !email.trim() || !subject.trim() || editorRef.current?.isEmpty()) return
 
     if (honeypot) {
       // Bot filled the hidden field — pretend success, send nothing.
@@ -40,7 +32,7 @@ export default function ContactForm() {
       setName('')
       setEmail('')
       setSubject('')
-      if (editorRef.current) editorRef.current.innerHTML = ''
+      editorRef.current?.clear()
       return
     }
 
@@ -62,7 +54,7 @@ export default function ContactForm() {
     setName('')
     setEmail('')
     setSubject('')
-    if (editorRef.current) editorRef.current.innerHTML = ''
+    editorRef.current?.clear()
   }
 
   return (
@@ -111,17 +103,10 @@ export default function ContactForm() {
 
       <div className="contact-form__field">
         <label>{f.message}</label>
-        <div className="contact-form__editor-toolbar">
-          <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'bold')} aria-label={f.bold}><b>B</b></button>
-          <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'italic')} aria-label={f.italic}><i>I</i></button>
-          <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'insertUnorderedList')} aria-label={f.list}>•—</button>
-        </div>
-        <div
+        <RichTextEditor
           ref={editorRef}
-          className="contact-form__editor"
-          contentEditable
-          data-placeholder={f.messagePlaceholder}
-          suppressContentEditableWarning
+          placeholder={f.messagePlaceholder}
+          labels={{ bold: f.bold, italic: f.italic, bulletList: f.list }}
         />
       </div>
 

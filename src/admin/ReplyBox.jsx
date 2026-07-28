@@ -1,8 +1,5 @@
 import { useRef, useState } from 'react'
-
-function exec(command) {
-  document.execCommand(command, false, undefined)
-}
+import RichTextEditor from '../components/RichTextEditor'
 
 function htmlToPlainText(html) {
   const el = document.createElement('div')
@@ -27,13 +24,8 @@ export default function ReplyBox({ toEmail, toName, defaultSubject, originalCont
   const editorRef = useRef(null)
   const [subject, setSubject] = useState(defaultSubject)
 
-  const handleToolbarClick = (e, command) => {
-    e.preventDefault()
-    exec(command)
-  }
-
   const openInMail = () => {
-    const html = editorRef.current?.innerHTML.trim() || ''
+    const html = editorRef.current?.getHTML() || ''
     let body = htmlToPlainText(html)
 
     if (originalContent) {
@@ -55,18 +47,7 @@ export default function ReplyBox({ toEmail, toName, defaultSubject, originalCont
         onChange={(e) => setSubject(e.target.value)}
         placeholder="Předmět"
       />
-      <div className="admin-reply__toolbar">
-        <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'bold')} aria-label="Tučně"><b>B</b></button>
-        <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'italic')} aria-label="Kurzíva"><i>I</i></button>
-        <button type="button" onMouseDown={(e) => handleToolbarClick(e, 'insertUnorderedList')} aria-label="Seznam">•—</button>
-      </div>
-      <div
-        ref={editorRef}
-        className="admin-reply__editor"
-        contentEditable
-        data-placeholder="Napiš odpověď…"
-        suppressContentEditableWarning
-      />
+      <RichTextEditor ref={editorRef} placeholder="Napiš odpověď…" labels={{ bold: 'Tučně', italic: 'Kurzíva', bulletList: 'Seznam' }} />
       <button type="button" className="admin-reply__send" onClick={openInMail}>
         Otevřít v e-mailu
       </button>
